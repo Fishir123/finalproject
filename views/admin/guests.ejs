@@ -1,0 +1,133 @@
+<%- include('../partials/admin-header', { title: title, user: user, currentPage: 'guests' }) %>
+
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Manage Guests</h1>
+        <p class="text-gray-600">View and manage all hotel guests</p>
+    </div>
+    
+    <!-- Search -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Search by Name</label>
+                <input type="text" placeholder="Enter guest name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Search by Email</label>
+                <input type="email" placeholder="Enter email address" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+            </div>
+            <div class="flex items-end">
+                <button class="w-full btn-primary">
+                    <i class="fas fa-search mr-2"></i>Search
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Guests Table -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">All Guests (<%= guests.length %>)</h3>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <% guests.forEach(guest => { %>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#<%= guest.id %></td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <div class="h-10 w-10 rounded-full bg-primary flex items-center justify-center">
+                                            <span class="text-white font-medium text-sm">
+                                                <%= guest.name.charAt(0).toUpperCase() %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900"><%= guest.name %></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900"><%= guest.email || 'N/A' %></div>
+                                <div class="text-sm text-gray-500"><%= guest.phone || 'N/A' %></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-gray-900 max-w-xs truncate">
+                                    <%= guest.address || 'N/A' %>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-primary hover:text-secondary mr-3" onclick="viewGuestDetails(<%= guest.id %>)">
+                                    <i class="fas fa-eye mr-1"></i>View
+                                </button>
+                                <button class="text-green-600 hover:text-green-900" onclick="contactGuest('<%= guest.email %>')">
+                                    <i class="fas fa-envelope mr-1"></i>Contact
+                                </button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        
+        <% if (guests.length === 0) { %>
+            <div class="text-center py-12">
+                <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No guests found</h3>
+                <p class="text-gray-500">There are no guests to display.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- Guest Details Modal -->
+<div id="guestModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Guest Details</h3>
+                <button onclick="closeGuestModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="guestDetails">
+                <!-- Guest details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function viewGuestDetails(guestId) {
+    // In a real application, you would fetch guest details via AJAX
+    document.getElementById('guestModal').classList.remove('hidden');
+}
+
+function closeGuestModal() {
+    document.getElementById('guestModal').classList.add('hidden');
+}
+
+function contactGuest(email) {
+    if (email && email !== 'N/A') {
+        window.location.href = 'mailto:' + email;
+    } else {
+        alert('No email address available for this guest.');
+    }
+}
+</script>
+
+<%- include('../partials/admin-footer') %>
+

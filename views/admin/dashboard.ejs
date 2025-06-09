@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#1E40AF',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" id="sidebar">
+            <!-- Logo -->
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-hotel text-2xl text-primary"></i>
+                    <span class="text-2xl font-bold">HotelIn</span>
+                </div>
+                <p class="text-sm text-gray-300 mt-1">Admin Panel</p>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="/admin/dashboard" class="bg-primary text-white block py-2.5 px-4 rounded transition duration-200 hover:bg-secondary">
+                    <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                </a>
+                <a href="/admin/reservations" class="text-gray-300 hover:bg-gray-700 hover:text-white block py-2.5 px-4 rounded transition duration-200">
+                    <i class="fas fa-calendar-check mr-3"></i>Reservations
+                </a>
+                <a href="/admin/rooms" class="text-gray-300 hover:bg-gray-700 hover:text-white block py-2.5 px-4 rounded transition duration-200">
+                    <i class="fas fa-bed mr-3"></i>Rooms
+                </a>
+                <a href="/admin/guests" class="text-gray-300 hover:bg-gray-700 hover:text-white block py-2.5 px-4 rounded transition duration-200">
+                    <i class="fas fa-users mr-3"></i>Guests
+                </a>
+                <a href="/admin/payments" class="text-gray-300 hover:bg-gray-700 hover:text-white block py-2.5 px-4 rounded transition duration-200">
+                    <i class="fas fa-credit-card mr-3"></i>Payments
+                </a>
+            </nav>
+            
+            <!-- User Info -->
+            <div class="absolute bottom-0 w-full p-4">
+                <div class="bg-gray-700 rounded-lg p-3">
+                    <p class="text-sm font-medium"><%= user.username %></p>
+                    <p class="text-xs text-gray-300">Administrator</p>
+                    <a href="/admin/logout" class="text-red-400 hover:text-red-300 text-sm mt-2 inline-block">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top bar -->
+            <header class="bg-white shadow-lg">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <button class="md:hidden text-gray-500 hover:text-gray-700" id="sidebar-toggle">
+                                <i class="fas fa-bars text-xl"></i>
+                            </button>
+                            <h1 class="text-2xl font-bold text-gray-900 ml-4 md:ml-0">Dashboard</h1>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="/" target="_blank" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span class="ml-1 hidden sm:inline">View Website</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white overflow-hidden shadow rounded-lg">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-calendar-check text-2xl text-blue-500"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 truncate">Total Reservations</dt>
+                                            <dd class="text-lg font-medium text-gray-900"><%= stats.totalReservations %></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white overflow-hidden shadow rounded-lg">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-clock text-2xl text-green-500"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 truncate">Active Reservations</dt>
+                                            <dd class="text-lg font-medium text-gray-900"><%= stats.activeReservations %></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white overflow-hidden shadow rounded-lg">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-bed text-2xl text-purple-500"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 truncate">Available Rooms</dt>
+                                            <dd class="text-lg font-medium text-gray-900"><%= stats.availableRooms %>/<%= stats.totalRooms %></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white overflow-hidden shadow rounded-lg">
+                            <div class="p-5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-dollar-sign text-2xl text-yellow-500"></i>
+                                    </div>
+                                    <div class="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt class="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
+                                            <dd class="text-lg font-medium text-gray-900">$<%= stats.totalRevenue.toFixed(2) %></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Recent Reservations -->
+                        <div class="bg-white shadow rounded-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Reservations</h3>
+                                <div class="space-y-3">
+                                    <% recentReservations.forEach(reservation => { %>
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900"><%= reservation.guest_name %></p>
+                                                <p class="text-sm text-gray-500">Room <%= reservation.room_number %> - <%= reservation.type_name %></p>
+                                                <p class="text-xs text-gray-400"><%= new Date(reservation.created_at).toLocaleDateString() %></p>
+                                            </div>
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full
+                                                <%= reservation.status === 'booked' ? 'bg-blue-100 text-blue-800' : 
+                                                    reservation.status === 'checked_in' ? 'bg-green-100 text-green-800' :
+                                                    reservation.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                                                    'bg-red-100 text-red-800' %>">
+                                                <%= reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1).replace('_', ' ') %>
+                                            </span>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="/admin/reservations" class="text-primary hover:text-secondary font-medium text-sm">
+                                        View all reservations →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Payments -->
+                        <div class="bg-white shadow rounded-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Payments</h3>
+                                <div class="space-y-3">
+                                    <% recentPayments.forEach(payment => { %>
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900">$<%= payment.amount %></p>
+                                                <p class="text-sm text-gray-500"><%= payment.guest_name %> - Room <%= payment.room_number %></p>
+                                                <p class="text-xs text-gray-400"><%= new Date(payment.payment_date).toLocaleDateString() %></p>
+                                            </div>
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full
+                                                <%= payment.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                                                <%= payment.status.charAt(0).toUpperCase() + payment.status.slice(1) %>
+                                            </span>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="/admin/payments" class="text-primary hover:text-secondary font-medium text-sm">
+                                        View all payments →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // Sidebar toggle for mobile
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,69 @@
+<%- include('partials/header') %>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+        <div class="mb-8">
+            <i class="fas fa-check-circle text-6xl text-green-500 mb-4"></i>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Booking Confirmed!</h1>
+            <p class="text-xl text-gray-600">Thank you for choosing HotelIn</p>
+        </div>
+
+        <div class="bg-gray-50 rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Reservation Details</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <div>
+                    <p class="text-sm text-gray-600">Reservation ID</p>
+                    <p class="font-semibold text-gray-800">#<%= reservation.id %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Guest Name</p>
+                    <p class="font-semibold text-gray-800"><%= reservation.guest_name %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Room</p>
+                    <p class="font-semibold text-gray-800"><%= reservation.room_type %> - Room <%= reservation.room_number %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Check-in Date</p>
+                    <p class="font-semibold text-gray-800"><%= new Date(reservation.check_in).toLocaleDateString() %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Check-out Date</p>
+                    <p class="font-semibold text-gray-800"><%= new Date(reservation.check_out).toLocaleDateString() %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Number of Nights</p>
+                    <p class="font-semibold text-gray-800"><%= reservation.nights %> night(s)</p>
+                </div>
+                <div class="md:col-span-2">
+                    <p class="text-sm text-gray-600">Total Amount</p>
+                    <p class="font-bold text-2xl text-primary">$<%= reservation.total_amount %></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+            <h3 class="font-semibold text-blue-800 mb-2">Important Information</h3>
+            <ul class="text-sm text-blue-700 text-left space-y-1">
+                <li>• Please arrive at the hotel after 3:00 PM on your check-in date</li>
+                <li>• Check-out time is 11:00 AM</li>
+                <li>• Please bring a valid ID for check-in</li>
+                <li>• You can check your reservation status anytime using your email or reservation ID</li>
+            </ul>
+        </div>
+
+        <div class="space-y-4">
+            <a href="/reservation/status" class="btn-primary inline-block">
+                <i class="fas fa-search mr-2"></i>Check Reservation Status
+            </a>
+            <br>
+            <a href="/" class="btn-secondary inline-block">
+                <i class="fas fa-home mr-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
+

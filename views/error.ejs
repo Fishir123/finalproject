@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+        <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-6"></i>
+        
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+            <% if (error && error.status) { %>
+                <%= error.status %> Error
+            <% } else { %>
+                Oops! Something went wrong
+            <% } %>
+        </h1>
+        
+        <p class="text-xl text-gray-600 mb-8">
+            <%= message || 'An unexpected error occurred' %>
+        </p>
+        
+        <% if (error && error.status === 404) { %>
+            <p class="text-gray-600 mb-8">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+        <% } %>
+        
+        <div class="space-y-4">
+            <a href="/" class="btn-primary inline-block">
+                <i class="fas fa-home mr-2"></i>Go to Homepage
+            </a>
+            <br>
+            <button onclick="history.back()" class="btn-secondary inline-block">
+                <i class="fas fa-arrow-left mr-2"></i>Go Back
+            </button>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <p class="text-gray-600 mb-4">Need help? Contact our support team</p>
+            <div class="space-y-2">
+                <p class="text-gray-700"><i class="fas fa-phone mr-2"></i>+1 234 567 8900</p>
+                <p class="text-gray-700"><i class="fas fa-envelope mr-2"></i>support@hotelin.com</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
+

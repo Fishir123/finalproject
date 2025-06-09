@@ -1,0 +1,107 @@
+<%- include('partials/header') %>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Reservation Details</h1>
+
+        <!-- Reservation Info -->
+        <div class="bg-gray-50 rounded-lg p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <p class="text-sm text-gray-600">Reservation ID</p>
+                    <p class="font-semibold text-gray-800 text-lg">#<%= reservation.id %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Status</p>
+                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold
+                        <%= reservation.status === 'booked' ? 'bg-blue-100 text-blue-800' : 
+                            reservation.status === 'checked_in' ? 'bg-green-100 text-green-800' :
+                            reservation.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                            'bg-red-100 text-red-800' %>">
+                        <%= reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1).replace('_', ' ') %>
+                    </span>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Guest Name</p>
+                    <p class="font-semibold text-gray-800"><%= reservation.guest_name %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Email</p>
+                    <p class="font-semibold text-gray-800"><%= reservation.email %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Phone</p>
+                    <p class="font-semibold text-gray-800"><%= reservation.phone %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Room</p>
+                    <p class="font-semibold text-gray-800"><%= reservation.type_name %> - Room <%= reservation.room_number %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Check-in Date</p>
+                    <p class="font-semibold text-gray-800"><%= new Date(reservation.check_in).toLocaleDateString() %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Check-out Date</p>
+                    <p class="font-semibold text-gray-800"><%= new Date(reservation.check_out).toLocaleDateString() %></p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Room Price</p>
+                    <p class="font-semibold text-gray-800">$<%= reservation.price %>/night</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Booking Date</p>
+                    <p class="font-semibold text-gray-800"><%= new Date(reservation.created_at).toLocaleDateString() %></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Information -->
+        <% if (payments && payments.length > 0) { %>
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Payment Information</h2>
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <% payments.forEach(payment => { %>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                            <div>
+                                <p class="font-semibold text-gray-800">$<%= payment.amount %></p>
+                                <p class="text-sm text-gray-600">
+                                    <%= payment.method.charAt(0).toUpperCase() + payment.method.slice(1) %> - 
+                                    <%= new Date(payment.payment_date).toLocaleDateString() %>
+                                </p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                <%= payment.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                                <%= payment.status.charAt(0).toUpperCase() + payment.status.slice(1) %>
+                            </span>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Room Image -->
+        <% if (reservation.img) { %>
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Room</h2>
+                <div class="rounded-lg overflow-hidden">
+                    <img src="/images/<%= reservation.img %>" alt="<%= reservation.type_name %>" class="w-full h-64 object-cover">
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Actions -->
+        <div class="text-center space-y-4">
+            <a href="/reservation/status" class="btn-secondary inline-block">
+                <i class="fas fa-search mr-2"></i>Check Another Reservation
+            </a>
+            <br>
+            <a href="/" class="btn-primary inline-block">
+                <i class="fas fa-home mr-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
+
